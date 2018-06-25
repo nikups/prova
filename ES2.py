@@ -46,7 +46,7 @@ f2 = open('/home/nikups/Scrivania/Uni/PROGRAMMAZIONE_SIST_ROBOTICI/ESERCITAZIONI
 
 sistema1 = G()
 sistema2 = G()
-PID = PIDController(3,0,1)
+PID = PIDController(200,0.5,0.5)
 
 # Scelta del tempo di campionamento
 # I poli sono c.c. con parte reale negativa e pari a 1.5
@@ -57,13 +57,12 @@ PID = PIDController(3,0,1)
 delta_t = 0.0005
 points = int(5/delta_t)
 
-u = 1.
-y2 = 0.  
-y=0.
-y1 = 0.
+u = 1
+y2 = 0
+y1 = 0
 
 for i in range (0,points):
-    pid_out = PID.evaluate(u,y,delta_t)
+    pid_out = PID.evaluate(u,y2,delta_t)
     y2 = sistema2.evaluate(pid_out,delta_t)
     y1 = sistema1.evaluate(u,delta_t)
     out1.append(y1) # mi salvo l uscita del sistema senza PID
