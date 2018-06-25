@@ -22,8 +22,8 @@ class G :
         self.__x2 = 0
     
     def evaluate (self,u,delta_t):
-        x1 = self.__x1 +delta_t*self.__x2
-        x2 = -4*delta_t*self.__x1 + (-5*delta_t +1) * self.__x2 + delta_t*u
+        x1 = self.__x1 + delta_t*self.__x2
+        x2 = -4*delta_t*self.__x1 + ((-5*delta_t) +1)*self.__x2 + delta_t*u
         y = 8*self.__x1
         self.__x1 = x1
         self.__x2 = x2
@@ -37,9 +37,10 @@ out1 = []
 outpid = []
 
 u = 1
-y2 = 0.  
+y2 = 0
 y=0.
-y1 = 0.
+y1 = 0
+i=0
 
 f = open('/home/nikups/Scrivania/Uni/PROGRAMMAZIONE_SIST_ROBOTICI/ESERCITAZIONI/ES4/dati4', 'w')
 f2 = open('/home/nikups/Scrivania/Uni/PROGRAMMAZIONE_SIST_ROBOTICI/ESERCITAZIONI/ES4/dati4_pid', 'w')
@@ -56,10 +57,12 @@ points = int(5/delta_t)
 
 sistema1 = G()
 sistema2 = G()
-PID = PIDController(0.5,0,0.5)
+PID = PIDController(15,10,0.5)
 
-for i in range (0, points):
-    pid_output = PID.evaluate(u,y,delta_t)
+# AL PID METTERE L USCITA GIUSTA CIOE QUELLA DEL SISTEMA 2 CON PID
+
+for i in range(0, points):
+    pid_output = PID.evaluate(u,y2,delta_t)
     y2 = sistema2.evaluate(pid_output,delta_t)
     y1 = sistema1.evaluate(u,delta_t)
     out1.append(y1)
@@ -75,7 +78,7 @@ for i in range (0, points):
 
 ##### CALCOLO TEMPO DI ASSESTAMENTO SENZA PID #####
 
-t_as = 0
+t_as = 0.
 
 for i in range (0, points):
      if (float(out1[i]) > ((yinf*95)/100)) and (float(out1[i]) < ((yinf*105)/100)):
@@ -90,10 +93,10 @@ print("il tempo di assestamento senza pid e: "+str(t_as))
 
 ##### CALCOLO TEMPO DI ASSESTAMENTO CON PID #####
 
-t_as2 = 0
+t_as2 = 0.
 
 for i in range (0, points):
-     if (float(outpid[i]) > ((yinf*95)/100)) and (float(outpid[i]) < ((yinf*105)/100)):
+     if (float(outpid[i]) > ((u*95)/100)) and (float(outpid[i]) < ((u*105)/100)):
          t_as2 = t[i] # prendo il tempo al tempo i 
          break
     # mi metto in una banda del 5 percento 
